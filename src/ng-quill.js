@@ -260,7 +260,6 @@
         }
 
         var unregister = $scope.$on('$destroy', function () {
-
             if (unregister) unregister();
             unregister = null;
 

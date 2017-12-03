@@ -24,7 +24,7 @@
     "angular": "^1.5.3"
   },
   "scripts": {
-    "build": "rimraf dist && mkdir dist && cp src/ng-quill.js dist/ && cat dist/ng-quill.js | uglifyjs > dist/ng-quill.min.js && echo \";\" >> dist/ng-quill.js",
+    "build": "rimraf dist && mkdir dist && xcopy /f \"src\\ng-quill.js\" dist && type dist\\ng-quill.js | uglifyjs > dist\\ng-quill.min.js && echo \";\" >> dist\\ng-quill.js",
     "prepare": "npm run test && npm run build",
     "test": "karma start"
   },

@@ -49,5 +49,3 @@
     }
   ]
 }
-
-// rimraf dist && mkdir dist && xcopy /f "src/ng-quill.js" dist && type dist\ng-quill.js | uglifyjs > dist/ng-quill.min.js && echo \";\" >> dist/ng-quill.js

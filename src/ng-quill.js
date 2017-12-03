@@ -258,6 +258,66 @@
         if (this.onEditorCreated) {
           this.onEditorCreated({editor: editor})
         }
+
+        var unregister = $scope.$on('$destroy', function () {
+              if (unregister) unregister();
+              unregister = null;
+
+              editor.off('selection-change', function (range, oldRange, source) {
+                  if (this.onSelectionChanged) {
+                      this.onSelectionChanged({
+                          editor: editor,
+                          oldRange: oldRange,
+                          range: range,
+                          source: source
+                      })
+                  }
+
+                  if (range) {
+                      return
+                  }
+                  $scope.$applyAsync(function () {
+                      this.ngModelCtrl.$setTouched()
+                  }.bind(this))
+              });
+              editor.off('text-change', function (delta, oldDelta, source) {
+                  var html = editorElem.children[0].innerHTML
+                  var text = editor.getText()
+
+                  if (html === '<p><br></p>') {
+                      html = null
+                  }
+                  this.validate(text)
+
+                  if (!modelChanged) {
+                      $scope.$applyAsync(function () {
+                          editorChanged = true
+
+                          this.ngModelCtrl.$setViewValue(html)
+
+                          if (this.onContentChanged) {
+                              this.onContentChanged({
+                                  editor: editor,
+                                  html: html,
+                                  text: text,
+                                  delta: delta,
+                                  oldDelta: oldDelta,
+                                  source: source
+                              })
+                          }
+                      }.bind(this))
+                  }
+                  modelChanged = false
+              });
+              editor.off();
+
+              $editorElem.off();
+              $editorElem.unbind();
+              $editorElem.remove();
+
+              content = editorElem = modelChanged = editorChanged =
+                  editor = placeholder = container = $editorElem = null;
+          })
       }
     }]
   })
